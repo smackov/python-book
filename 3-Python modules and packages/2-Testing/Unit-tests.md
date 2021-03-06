@@ -104,7 +104,7 @@ python3 TestCalculator.py -v
 
 Мы видим результаты работы наших юнит-тестов. Все они завершились успехом, ошибок не возникло:
 
-```python
+```bash
 test_add (__main__.TestCalculator) ... ok
 test_divide (__main__.TestCalculator) ... ok
 test_multiply (__main__.TestCalculator) ... ok
@@ -122,23 +122,49 @@ OK
 
 ```python
 import unittest
+
 from Calculator import Calculator
+
 #Test cases to test Calulator methods
 #You always create  a child class derived from unittest.TestCase class
 class TestCalculator(unittest.TestCase):
-#setUp method overridden from the parent class TestCase
- def setUp(self):
-  self.calculator = Calculator()
-...
- def test_divide(self):
-  self.assertEqual(self.calculator.divide(10,2), 6)
+
+    #setUp method overridden from the parent class TestCase
+    def setUp(self):
+    self.calculator = Calculator()
+    
+    ...
+    
+    def test_divide(self):
+    self.assertEqual(self.calculator.divide(10,2), 6)
+
 # Executing the tests in the above test case class
 if __name__ == "__main__":
- unittest.main()
+    unittest.main()
 ```
 
-```python
+Теперь, при запуске наших тестов мы получим следующий результат:
 
+```bash
+test_add (__main__.TestCalculator) ... ok
+test_divide (__main__.TestCalculator) ... FAIL
+test_multiply (__main__.TestCalculator) ... ok
+test_subtract (__main__.TestCalculator) ... ok
+
+====================================================================
+FAIL: test_divide (__main__.TestCalculator)
+--------------------------------------------------------------------
+Traceback (most recent call last):
+  File "TestCalculator.py", line 23, in test_divide
+    self.assertEqual(self.calculator.divide(10,2), 6)
+AssertionError: 5.0 != 6
+
+--------------------------------------------------------------------
+Ran 4 tests in 0.001s
+
+FAILED (failures=1)
 ```
+
+В выводе написано, что 3 из 4 тестов прошли успешно, а один не удался. В реальном сценарии, предполагается, что наш тестовый случай является верным, то есть таким образом он помогает определять неправильно реализованную части (юниты) программы.
 
 > Первод статьи [A Quick Start Guide to Python unittest (Part 1)](https://medium.com/@mashood.snhu/a-quick-start-guide-to-python-unittest-part-1-9653683637ca)
