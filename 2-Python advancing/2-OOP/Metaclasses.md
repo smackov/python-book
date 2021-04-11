@@ -482,22 +482,5 @@ print(YourClass.foo)
 # this ouputs 'bar'
 ```
 
-```python
-
-```
-
-```python
-
-```
-
-```python
-
-```
-
-```python
-
-```
-
-
 > Данная статья является переводом англоязычной статьи [Python metaclasses demystified](http://web.archive.org/web/20130201004931/http://yeleman.com/python-metaclasses-demystified/)
 
