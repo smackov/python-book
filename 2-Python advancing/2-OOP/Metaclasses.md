@@ -302,8 +302,6 @@ Python делает следующее:
 Итак, начнем с примера, который использует функцию:
 
 ```python
-# the metaclass will automatically get passed the same argument
-# that you usually pass to <code>type</code>
 def upper_attr(future_class_name, future_class_parents, future_class_attr):
     """
       Return a class object, with the list of its attribute turned
@@ -324,21 +322,16 @@ class Foo(object):
     # we can define __metaclass__ here instead to affect only this class
     bar = 'bip'
  
-print hasattr(Foo, 'bar')
-# Out: False
-print hasattr(Foo, 'BAR')
-# Out: True
+print hasattr(Foo, 'bar')  # Out: False
+print hasattr(Foo, 'BAR')  # Out: True
  
 f = Foo()
-print f.BAR
-# Out: 'bip'
+print f.BAR  # Out: 'bip'
 ```
 
 Теперь, давайте сделаем тоже самое, но используя настоящий класс для метакласса:
 
 ```python
-# remember that <code>type</code> is actually a class like <code>str</code> and <code>int</code>
-# so you can inherit from it
 class UpperAttrMetaclass(type):
   # __new__ is the method called before __init__
   # it's the method that creates the object and returns it
@@ -478,8 +471,7 @@ class MyMetaClass(type):
 class YourClass(metaclass=MyMetaClass):
     pass
  
-print(YourClass.foo)
-# this ouputs 'bar'
+print(YourClass.foo)  # this ouputs 'bar'
 ```
 
 > Данная статья является переводом англоязычной статьи [Python metaclasses demystified](http://web.archive.org/web/20130201004931/http://yeleman.com/python-metaclasses-demystified/)
