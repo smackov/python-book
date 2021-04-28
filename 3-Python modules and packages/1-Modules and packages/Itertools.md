@@ -28,3 +28,20 @@
 | takewhile() | pred, seq | seq[0], seq[1], until pred fail | `takewhile(lambda x: x<5, [1,4,6,4,1]) --> 1 4` |
 | tee() | it, n | it1, it2, ... itn splits one iterator into n |  |
 | zip_longest() | p, q, ... | (p[0], q[0]), (p[1], q[1]), ... | zip_longest('ABCD', 'xy', fillvalue='-') --> Ax By C- D- |
+
+**Комбинаторные итераторы:**
+
+| Итератор | Аргументы | Результаты |
+|---|---|---|---|
+| product() | p, q, ... [repeat=1] | cartesian product, equivalent to a nested for-loop |
+| permutaions() | p[, r] | r-length tuples, all possible orderings, no repeated elements |
+| combinations() | p, r | r-length tuples, in sorted order, no repeated elements |
+| combinations_with_replacement() | p, r |  |
+
+
+| Примеры | Результаты |
+|---|---|
+| `product('ABCD', repeat=2)` | `AA AB AC AD BA BB BC BD CA CB CC CD DA DB DC DD` |
+| `permutations('ABCD', 2)` | `AB AC AD BA BC BD CA CB CD DA DB DC` |
+| `combinations('ABCD', 2)` | `AB AC AD BC BD CD` |
+| `combinations_with_replacement('ABCD', 2)` | `AA AB AC AD BB BC BD CC CD DD` |
