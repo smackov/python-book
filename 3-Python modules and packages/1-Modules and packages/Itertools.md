@@ -32,11 +32,11 @@
 **Комбинаторные итераторы:**
 
 | Итератор | Аргументы | Результаты |
-|---|---|---|---|
+|---|---|---|
 | product() | p, q, ... [repeat=1] | cartesian product, equivalent to a nested for-loop |
 | permutaions() | p[, r] | r-length tuples, all possible orderings, no repeated elements |
 | combinations() | p, r | r-length tuples, in sorted order, no repeated elements |
-| combinations_with_replacement() | p, r |  |
+| combinations_with_replacement() | p, r | r-length tuples, in sorted order, with repeated elements |
 
 
 | Примеры | Результаты |
