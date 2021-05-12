@@ -24,7 +24,7 @@ def test_capital_case():
 
 Сразу бросается в глаза то, что pytest использует простой оператор assert, который намного проще запомнить и использовать по сравнению с многочисленными `assertSomething` функциями, найденными в `unittest`.
 
-Чтобы запустить тест, выполните `pytest` команду:
+Чтобы запустить тест, перейдите в папку программы и выполните `pytest` команду:
 
 ```bash
 $ pytest
@@ -78,16 +78,85 @@ def capital_case(x):
 
 # Использование Pytest Fixtures
 
-```python
+В следующих разделах мы рассмотрим некоторые более продвинутые функции pytest. Для этого нам понадобится небольшой проект.
 
+Мы будем писать `wallet` приложение, которое позволит пользователям добавлять или тратить деньги в кошелек. Он будет смоделирован как класс с двумя методами экземпляра: `spend_cash` и `add_cash`.
+
+Мы начнем с написания наших тестов. Создайте файл с именем `test_wallet.py` в рабочем каталоге и добавьте следующее содержимое:
+
+```python
+# test_wallet.py
+
+import pytest
+from wallet import Wallet, InsufficientAmount
+
+
+def test_default_initial_amount():
+    wallet = Wallet()
+    assert wallet.balance == 0
+
+def test_setting_initial_amount():
+    wallet = Wallet(100)
+    assert wallet.balance == 100
+
+def test_wallet_add_cash():
+    wallet = Wallet(10)
+    wallet.add_cash(90)
+    assert wallet.balance == 100
+
+def test_wallet_spend_cash():
+    wallet = Wallet(20)
+    wallet.spend_cash(10)
+    assert wallet.balance == 10
+
+def test_wallet_spend_cash_raises_exception_on_insufficient_amount():
+    wallet = Wallet()
+    with pytest.raises(InsufficientAmount):
+        wallet.spend_cash(100)
 ```
 
-```python
+Перво-наперво, мы импортируем Walletкласс и InsufficientAmountисключение, которое мы ожидаем вызвать, когда пользователь пытается потратить больше денег, чем есть в его кошельке.
 
+Когда мы инициализируем Walletкласс, мы ожидаем, что он будет иметь баланс по умолчанию 0. Однако, когда мы инициализируем класс значением, это значение должно быть установлено как начальный баланс кошелька.
+
+Переходя к методам, которые мы планируем реализовать, мы проверяем, что add_cashметод правильно увеличивает баланс с добавленной суммой. С другой стороны, мы также гарантируем, что этот spend_cashметод уменьшит баланс на потраченную сумму и что мы не сможем потратить больше денег, чем есть в кошельке. Если мы попытаемся это сделать, InsufficientAmountдолжно возникнуть исключение.
+
+Выполнение тестов на этом этапе должно завершиться ошибкой, поскольку мы еще не создали наш Walletкласс. Приступим к его созданию. Создайте файл с именем wallet.py, и мы добавим Walletв него нашу реализацию. Файл должен выглядеть следующим образом:
+
+```python
+# wallet.py
+
+class InsufficientAmount(Exception):
+    pass
+
+
+class Wallet(object):
+
+    def __init__(self, initial_amount=0):
+        self.balance = initial_amount
+
+    def spend_cash(self, amount):
+        if self.balance < amount:
+            raise InsufficientAmount('Not enough available to spend {}'.format(amount))
+        self.balance -= amount
+
+    def add_cash(self, amount):
+        self.balance += amount
 ```
 
-```python
+Прежде всего, мы определяем наше настраиваемое исключение, InsufficientAmountкоторое будет вызвано, когда мы попытаемся потратить больше денег, чем есть в кошельке. WalletКласс затем следующим образом . Конструктор принимает начальную сумму, которая по умолчанию равна, 0если она не указана. Затем начальная сумма устанавливается как баланс.
 
+В spend_cashметоде мы сначала проверяем, что у нас есть достаточный баланс. Если баланс ниже суммы, которую мы собираемся потратить, мы вызываем InsufficientAmountисключение с дружественным сообщением об ошибке.
+
+Далее следует реализация add_cash, которая просто добавляет предоставленную сумму к текущему балансу кошелька.
+
+Как только мы это сделаем, мы сможем перезапустить наши тесты, и они должны пройти.
+
+```bash
+$ pytest -q test_wallet.py
+
+.....
+5 passed in 0.01 seconds
 ```
 
 ```python
