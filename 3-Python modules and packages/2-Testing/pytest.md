@@ -159,8 +159,47 @@ $ pytest -q test_wallet.py
 5 passed in 0.01 seconds
 ```
 
-```python
+# Рефакторинг наших тестов с Fixtures
 
+Вы могли заметить некоторые повторения, когда мы инициализировали класс в каждом тесте. Это место, где полезно использовать [python fixtures](https://docs.pytest.org/en/latest/explanation/fixtures.html?highlight=fixtures). Они помогают в создании некоторого вспомогательного кода, который должен выполняться перед некоторыми тестами, и они великолепны для создания начальной информации, необходимой для тестов.
+
+Функции с фикстурами создаются с помощью декоратора `@pytest.fixture`. Функции тестов, которым необходимы фикстуры должны принимать их в качестве аргументов. Для примера, для теста, принимающего фикстуру с названием `wallet`, это должен быть аргумент с именем фикстуры, то есть `wallet`.
+
+Давайте посмотрим, как это работает на практике. Мы проведем рефакторинг нашей первой версии тестов, использую фикстуры там, где они полезны.
+
+```python
+# test_wallet.py
+
+import pytest
+from wallet import Wallet, InsufficientAmount
+
+@pytest.fixture
+def empty_wallet():
+    '''Returns a Wallet instance with a zero balance'''
+    return Wallet()
+
+@pytest.fixture
+def wallet():
+    '''Returns a Wallet instance with a balance of 20'''
+    return Wallet(20)
+
+def test_default_initial_amount(empty_wallet):
+    assert empty_wallet.balance == 0
+
+def test_setting_initial_amount(wallet):
+    assert wallet.balance == 20
+
+def test_wallet_add_cash(wallet):
+    wallet.add_cash(80)
+    assert wallet.balance == 100
+
+def test_wallet_spend_cash(wallet):
+    wallet.spend_cash(10)
+    assert wallet.balance == 10
+
+def test_wallet_spend_cash_raises_exception_on_insufficient_amount(empty_wallet):
+    with pytest.raises(InsufficientAmount):
+        empty_wallet.spend_cash(100)
 ```
 
 ```python
